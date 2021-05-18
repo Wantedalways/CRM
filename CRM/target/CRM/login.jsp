@@ -34,27 +34,7 @@
             const password = $.trim($("#password").val());
             if (userName === "" || password === "") {
                 $("#msg").html("用户名和密码不能为空！");
-                return false;
             }
-            // ajax验证登录信息的合法性
-            $.ajax({
-                url :"user/login.do",
-                data : {
-                    "loginAct" : userName,
-                    "loginPwd" : password
-                },
-                dataType :"json",
-                type : "post",
-                success : function (data) {
-                    if (data.success) {
-                        // 验证成功则跳转到初始工作界面
-                        window.location.href = "workbench/index.html";
-                    } else {
-                        // 验证失败则显示错误信息
-                        $("#msg").html(data.msg);
-                    }
-                }
-            })
         }
     </script>
 </head>
