@@ -48,7 +48,7 @@
                 success : function (data) {
                     if (data.success) {
                         // 验证成功则跳转到初始工作界面
-                        window.location.href = "workbench/index.html";
+                        window.location.href = "workbench/index.jsp";
                     } else {
                         // 验证失败则显示错误信息
                         $("#msg").html(data.msg);
