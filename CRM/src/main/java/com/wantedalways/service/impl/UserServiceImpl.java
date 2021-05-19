@@ -15,7 +15,7 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public void login(String loginAct, String loginPwd, String ip) throws LoginException{
+    public User login(String loginAct, String loginPwd, String ip) throws LoginException{
 
         User user = userDao.selectUserLogin(loginAct,loginPwd);
 
@@ -37,5 +37,6 @@ public class UserServiceImpl implements UserService {
         if (!user.getAllowIps().contains(ip)) {
             throw new LoginException("ip地址受限！");
         }
+        return user;
     }
 }

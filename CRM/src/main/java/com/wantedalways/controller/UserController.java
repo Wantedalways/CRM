@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.DatabaseMetaData;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,7 +33,11 @@ public class UserController {
         // 获取请求的ip地址
         String ip = request.getRemoteAddr();
 
-        userService.login(loginAct,loginPwd,ip);
+        User user = userService.login(loginAct,loginPwd,ip);
+
+        // Session令牌，防止恶意登录
+        HttpSession session = request.getSession();
+        session.setAttribute("user",user);
 
         Map<String,Object> resultMap = new HashMap<>();
         resultMap.put("success",true);

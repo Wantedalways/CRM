@@ -4,15 +4,15 @@
             request.getServerName() + ":" + request.getServerPort() +
             request.getContextPath() + "/";
 %>
-<!DOCTYPE html>
 <html>
 <head>
-    <base href="<%=basePath%>">
-    <link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
-    <script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+    <base href="<%=basePath%>" />
+    <link href="static/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="static/jquery/jquery-1.11.1-min.js"></script>
+    <script type="text/javascript" src="static/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
     <script type="text/javascript">
         $(function () {
+
             // 页面打开用户名清空并自动获得焦点
             $("#userName").val("");
             $("#userName").focus();
@@ -57,10 +57,11 @@
             })
         }
     </script>
+    <title></title>
 </head>
 <body>
 <div style="position: absolute; top: 0px; left: 0px; width: 60%;">
-    <img src="image/IMG_7114.JPG" style="width: 100%; height: 90%; position: relative; top: 50px;">
+    <img src="static/image/IMG_7114.JPG" style="width: 100%; height: 90%; position: relative; top: 50px;">
 </div>
 <div id="top" style="height: 50px; background-color: #3C3C3C; width: 100%;">
     <div style="position: absolute; top: 5px; left: 0px; font-size: 30px; font-weight: 400; color: white; font-family: 'times new roman'">CRM &nbsp;<span style="font-size: 12px;">&copy;2021&nbsp;Wantedalways</span></div>
