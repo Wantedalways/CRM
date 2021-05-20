@@ -49,7 +49,7 @@
     <!--验证访问合法性的过滤器-->
     <filter>
         <filter-name>loginFilter</filter-name>
-        <filter-class>com.wantedalways.filter.LoginFilter</filter-class>
+        <filter-class>com.wantedalways.crm.filter.LoginFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>loginFilter</filter-name>

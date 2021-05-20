@@ -4,12 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases>
-        <package name="com.wantedalways.entity"/>
+        <package name="com.wantedalways.crm.settings.entity"/>
+        <package name="com.wantedalways.crm.workbench.entity"/>
     </typeAliases>
     <plugins>
         <plugin interceptor="com.github.pagehelper.PageInterceptor"/>
     </plugins>
     <mappers>
-        <package name="com.wantedalways.dao"/>
+        <package name="com.wantedalways.crm.settings.dao"/>
+        <package name="com.wantedalways.crm.workbench.dao"/>
     </mappers>
 </configuration>

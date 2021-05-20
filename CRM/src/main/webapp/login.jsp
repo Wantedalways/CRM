@@ -13,6 +13,10 @@
     <script type="text/javascript">
         $(function () {
 
+            // 设置顶层窗口
+            if (window.top !== window) {
+                window.top.location = window.location;
+            }
             // 页面打开用户名清空并自动获得焦点
             $("#userName").val("");
             $("#userName").focus();
