@@ -1,10 +1,9 @@
 package com.wantedalways.crm.workbench.service;
 
-import com.wantedalways.crm.settings.entity.User;
+import com.wantedalways.crm.workbench.entity.Activity;
 
-import java.util.List;
 
 public interface ActivityService {
 
-
+    int addActivity(Activity activity);
 }

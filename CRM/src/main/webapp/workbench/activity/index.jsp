@@ -73,9 +73,26 @@
             $("#saveCreateModal").click(function () {
 
                 $.ajax({
-                    url : "/activity/save.do",
+                    url : "activity/save.do",
                     data : {
                         "owner" : $.trim($("#create-marketActivityOwner").val()),
+                        "name" : $.trim($("#create-marketActivityName").val()),
+                        "startDate" : $.trim($("#create-startTime").val()),
+                        "endDate" : $.trim($("#create-endTime").val()),
+                        "cost" : $.trim($("#create-cost").val()),
+                        "description" : $.trim($("#create-describe").val())
+                    },
+                    type : "post",
+                    dataType : "json",
+                    success : function (data) {
+
+                        if (data.success) {
+                            // 刷新市场活动列表
+                            // 关闭模态窗口
+                            $("#createActivityModal").modal("hide");
+                        } else {
+                            alert("添加失败！");
+                        }
                     }
                 })
             })
