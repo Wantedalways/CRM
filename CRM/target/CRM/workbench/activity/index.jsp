@@ -22,6 +22,7 @@
 
         $(function () {
 
+            // 展现添加市场活动的模态窗口
             $("#addCreateModal").click(function () {
 
                 // 所有者下拉列表
@@ -69,7 +70,7 @@
                 });
             });
 
-            // 添加数据
+            // 添加市场活动
             $("#saveCreateModal").click(function () {
 
                 $.ajax({
@@ -88,15 +89,67 @@
 
                         if (data.success) {
                             // 刷新市场活动列表
+                            activityList(1,10);
                             // 关闭模态窗口
                             $("#createActivityModal").modal("hide");
+                            // 清空填写项
+                            $("#addActivityForm")[0].reset();
                         } else {
                             alert("添加失败！");
                         }
                     }
                 })
             })
+
+            // 展示市场活动列表
+            activityList(1,10);
+
+            // 市场活动查询按钮
+            $("#search-Btn").click(function () {
+
+                activityList(1,10);
+
+            });
         });
+
+        // 刷新市场活动的方法
+        activityList = function (pageNo,pageSize) {
+
+            $.ajax({
+
+                url : "activity/pageList.do",
+                data : {
+
+                    "pageNo" : pageNo,
+                    "pageSize" : pageSize,
+                    "name" : $.trim($("#search-activityName").val()),
+                    "createBy" : $.trim($("#search-activityOwner").val()),
+                    "startDate" : $.trim($("#search-activityStartDate").val()),
+                    "endDate" : $.trim($("#search-activityEndDate").val())
+                },
+                type : "get",
+                dataType : "json",
+                success : function (data) {
+
+                    var html = "";
+
+                    $.each(data.dataList,function (i,n) {
+
+                        html += '<tr class="active">';
+                        html += '<td><input type="checkbox" value="'+n.id+'"/></td>';
+                        html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.jsp\';">'+n.name+'</a></td>';
+                        html += '<td>'+n.owner+'</td>';
+                        html += '<td>'+n.startDate+'</td>';
+                        html += '<td>'+n.endDate+'</td>';
+                        html += '</tr>';
+
+                    })
+
+                    $("#activityListTbody").html(html);
+                    $("#totalCount").html(data.total);
+                }
+            })
+        }
 
     </script>
     <title></title>
@@ -115,7 +168,7 @@
             </div>
             <div class="modal-body">
 
-                <form class="form-horizontal" role="form">
+                <form class="form-horizontal" role="form" id="addActivityForm">
 
                     <div class="form-group">
                         <label for="create-marketActivityOwner" class="col-sm-2 control-label">所有者<span
@@ -242,21 +295,21 @@
 </div>
 <div style="position: relative; top: -20px; left: 0px; width: 100%; height: 100%;">
     <div style="width: 100%; position: absolute;top: 5px; left: 10px;">
-
+        <!--条件查询市场活动-->
         <div class="btn-toolbar" role="toolbar" style="height: 80px;">
             <form class="form-inline" role="form" style="position: relative;top: 8%; left: 5px;">
 
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">名称</div>
-                        <input class="form-control" type="text">
+                        <input class="form-control" type="text" id="search-activityName">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">所有者</div>
-                        <input class="form-control" type="text">
+                        <input class="form-control" type="text" id="search-activityOwner">
                     </div>
                 </div>
 
@@ -264,17 +317,17 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">开始日期</div>
-                        <input class="form-control" type="text" id="startTime"/>
+                        <input class="form-control" type="text" id="search-activityStartDate"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">结束日期</div>
-                        <input class="form-control" type="text" id="endTime">
+                        <input class="form-control" type="text" id="search-activityEndDate">
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-default">查询</button>
+                <button type="button" class="btn btn-default" id="search-Btn">查询</button>
 
             </form>
         </div>
@@ -302,30 +355,13 @@
                     <td>结束日期</td>
                 </tr>
                 </thead>
-                <tbody>
-                <tr class="active">
-                    <td><input type="checkbox"/></td>
-                    <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='workbench/activity/detail.jsp';">发传单</a></td>
-                    <td>zhangsan</td>
-                    <td>2020-10-10</td>
-                    <td>2020-10-20</td>
-                </tr>
-                <tr class="active">
-                    <td><input type="checkbox"/></td>
-                    <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='detail.html';">发传单</a></td>
-                    <td>zhangsan</td>
-                    <td>2020-10-10</td>
-                    <td>2020-10-20</td>
-                </tr>
-                </tbody>
+                <tbody id="activityListTbody"></tbody>
             </table>
         </div>
 
         <div style="height: 50px; position: relative;top: 30px;">
             <div>
-                <button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
+                <button type="button" class="btn btn-default" style="cursor: default;">共<b id="totalCount"></b>条记录</button>
             </div>
             <div class="btn-group" style="position: relative;top: -34px; left: 110px;">
                 <button type="button" class="btn btn-default" style="cursor: default;">显示</button>

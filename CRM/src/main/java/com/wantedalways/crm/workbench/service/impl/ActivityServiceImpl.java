@@ -1,5 +1,6 @@
 package com.wantedalways.crm.workbench.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.wantedalways.crm.settings.entity.User;
 import com.wantedalways.crm.workbench.dao.ActivityDao;
 import com.wantedalways.crm.workbench.entity.Activity;
@@ -19,5 +20,12 @@ public class ActivityServiceImpl implements ActivityService {
     public int addActivity(Activity activity) {
 
         return activityDao.insertActivity(activity);
+    }
+
+    @Override
+    public List<Activity> pageList(Integer pageNo, Integer pageSize, Activity activity) {
+
+        PageHelper.startPage(pageNo,pageSize);
+        return activityDao.selectActivityList(activity);
     }
 }
