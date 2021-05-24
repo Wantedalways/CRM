@@ -10,4 +10,8 @@ public interface ActivityDao {
     int insertActivity(Activity activity);
 
     List<Activity> selectActivityList(Activity activity);
+
+    int selectTotalByCondition(Activity activity);
+
+    int deleteActivityByIds(String[] id);
 }

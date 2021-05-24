@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!--配置组件扫描器-->
     <context:component-scan base-package="com.wantedalways.crm.**.dao,com.wantedalways.crm.**.service,com.wantedalways.crm.exceptionHandler,com.wantedalways.crm.util" />
@@ -27,4 +28,20 @@
         <property name="basePackage" value="com.wantedalways.crm.**.dao" />
     </bean>
 
+    <!--事务处理-->
+    <!--事务管理器对象-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!--配置事务属性-->
+    <tx:advice id="activityAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="delActivity" propagation="REQUIRED" isolation="DEFAULT" rollback-for="com.wantedalways.crm.exception.DeleteException"/>
+        </tx:attributes>
+    </tx:advice>
+    <!--配置事务AOP-->
+    <aop:config>
+        <aop:pointcut id="servicePointcut" expression="execution(* *..service.*.*(..))"/>
+        <aop:advisor advice-ref="activityAdvice" pointcut-ref="servicePointcut" />
+    </aop:config>
 </beans>

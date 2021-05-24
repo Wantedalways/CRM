@@ -42,4 +42,46 @@
         order by a.createTime desc
     </select>
 
+    <select id="selectTotalByCondition" resultType="int">
+
+        select
+            count(*)
+        from
+            tbl_activity a
+        join
+            tbl_user u
+        on
+            a.owner = u.id
+
+        <where>
+
+            <if test="name != null and name != ''">
+                a.name like "%" #{name} "%"
+            </if>
+
+            <if test="owner != null and owner != ''">
+                and u.name like "%"#{owner}"%"
+            </if>
+
+            <if test="startDate != null and startDate != ''">
+                and a.startDate &gt;= #{startDate}
+            </if>
+
+            <if test="endDate != null and endDate != ''">
+                and a.endDate &lt;= #{endDate}
+            </if>
+
+        </where>
+    </select>
+
+    <delete id="deleteActivityByIds">
+
+        delete from
+            tbl_activity
+        where
+            id in
+            <foreach collection="array" open="(" close=")" item="id" separator=",">
+                #{id}
+            </foreach>
+    </delete>
 </mapper>

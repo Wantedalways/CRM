@@ -1,5 +1,6 @@
 package com.wantedalways.crm.workbench.controller;
 
+import com.wantedalways.crm.exception.ActivityException;
 import com.wantedalways.crm.settings.entity.User;
 import com.wantedalways.crm.settings.service.UserService;
 import com.wantedalways.crm.util.DateUtil;
@@ -56,7 +57,7 @@ public class ActivityController {
         int result = activityService.addActivity(activity);
 
         Map<String,Object> resultMap = new HashMap<>();
-        if (result > 0) {
+        if (result == 0) {
 
             resultMap.put("success",true);
 
@@ -73,12 +74,24 @@ public class ActivityController {
     public PageListVo<Activity> pageList(Integer pageNo, Integer pageSize, Activity activity) {
 
         List<Activity> dataList = activityService.pageList(pageNo,pageSize,activity);
-        Integer total = dataList.size();
+        Integer total = activityService.queryTotalByCondition(activity);
 
         PageListVo<Activity> result = new PageListVo<>();
         result.setTotal(total);
         result.setDataList(dataList);
 
         return result;
+    }
+
+    @RequestMapping(value = "/delete.do")
+    @ResponseBody
+    public Map<String,Object> delActivity(String[] id) throws ActivityException {
+
+        boolean success = activityService.delActivity(id);
+
+        Map<String,Object> resultMap = new HashMap<>();
+        resultMap.put("success",success);
+
+        return resultMap;
     }
 }
