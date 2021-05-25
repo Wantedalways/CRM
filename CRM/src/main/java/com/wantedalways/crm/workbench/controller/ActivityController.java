@@ -47,24 +47,18 @@ public class ActivityController {
      */
     @RequestMapping(value = "/save.do")
     @ResponseBody
-    public Map<String,Object> saveActivity(Activity activity, HttpSession session) {
+    public Map<String,Object> saveActivity(Activity activity, HttpSession session) throws ActivityException {
 
         activity.setId(UUIDUtil.getUUID());
         activity.setCreateTime(DateUtil.getDate());
         User user = (User) session.getAttribute("user");
         activity.setCreateBy(user.getName());
 
-        int result = activityService.addActivity(activity);
+        boolean flag = activityService.addActivity(activity);
 
         Map<String,Object> resultMap = new HashMap<>();
-        if (result == 0) {
 
-            resultMap.put("success",true);
-
-        } else {
-
-            resultMap.put("success",false);
-        }
+        resultMap.put("success",flag);
 
         return resultMap;
     }
@@ -91,6 +85,26 @@ public class ActivityController {
 
         Map<String,Object> resultMap = new HashMap<>();
         resultMap.put("success",success);
+
+        return resultMap;
+    }
+
+    @RequestMapping(value = "/getActivityById.do")
+    @ResponseBody
+    public Activity getActivityById(String id) {
+
+        return activityService.getActivityById(id);
+    }
+
+    @RequestMapping(value = "/update.do")
+    @ResponseBody
+    public Map<String,Object> editActivity(Activity activity) throws ActivityException {
+
+        boolean flag = activityService.editActivity(activity);
+
+        Map<String,Object> resultMap = new HashMap<>();
+
+        resultMap.put("success",flag);
 
         return resultMap;
     }

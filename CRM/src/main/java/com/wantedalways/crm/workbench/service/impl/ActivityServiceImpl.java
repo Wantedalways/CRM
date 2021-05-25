@@ -21,9 +21,21 @@ public class ActivityServiceImpl implements ActivityService {
     private ActivityRemarkDao activityRemarkDao;
 
     @Override
-    public int addActivity(Activity activity) {
+    public boolean addActivity(Activity activity) throws ActivityException {
 
-        return activityDao.insertActivity(activity);
+        boolean flag = false;
+
+        int result = activityDao.insertActivity(activity);
+
+        if (result != 1) {
+
+            throw new ActivityException("添加市场活动失败！");
+
+        }
+
+        flag = true;
+
+        return flag;
     }
 
     @Override
@@ -71,8 +83,31 @@ public class ActivityServiceImpl implements ActivityService {
         }
 
         return flag;
+    }
 
+    @Override
+    public Activity getActivityById(String id) {
 
+        return activityDao.selectActivityById(id);
+
+    }
+
+    @Override
+    public boolean editActivity(Activity activity) throws ActivityException {
+
+        boolean flag = false;
+
+        int result = activityDao.updateActivity(activity);
+
+        if (result != 1) {
+
+            throw new ActivityException("修改市场活动失败！");
+
+        }
+
+        flag = true;
+
+        return flag;
     }
 }
 

@@ -8,11 +8,15 @@ import java.util.List;
 
 public interface ActivityService {
 
-    int addActivity(Activity activity);
+    boolean addActivity(Activity activity) throws ActivityException;
 
     List<Activity> pageList(Integer pageNo,Integer pageSize,Activity activity);
 
     Integer queryTotalByCondition(Activity activity);
 
     boolean delActivity(String[] id) throws ActivityException;
+
+    Activity getActivityById(String id);
+
+    boolean editActivity(Activity activity) throws ActivityException;
 }
