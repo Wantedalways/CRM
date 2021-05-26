@@ -7,10 +7,12 @@ import com.wantedalways.crm.util.DateUtil;
 import com.wantedalways.crm.util.UUIDUtil;
 import com.wantedalways.crm.vo.PageListVo;
 import com.wantedalways.crm.workbench.entity.Activity;
+import com.wantedalways.crm.workbench.entity.ActivityRemark;
 import com.wantedalways.crm.workbench.service.ActivityService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -98,13 +100,85 @@ public class ActivityController {
 
     @RequestMapping(value = "/update.do")
     @ResponseBody
-    public Map<String,Object> editActivity(Activity activity) throws ActivityException {
+    public Map<String,Object> editActivity(Activity activity,HttpSession session) throws ActivityException {
+
+        User user = (User) session.getAttribute("user");
+        activity.setEditBy(user.getName());
+        activity.setEditTime(DateUtil.getDate());
 
         boolean flag = activityService.editActivity(activity);
 
         Map<String,Object> resultMap = new HashMap<>();
 
         resultMap.put("success",flag);
+
+        return resultMap;
+    }
+
+    @RequestMapping(value = "/detail.do")
+    public ModelAndView toDetail(String id) {
+
+        Activity activity = activityService.getDetailById(id);
+
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("activity",activity);
+        mv.setViewName("/workbench/activity/detail.jsp");
+
+        return mv;
+    }
+
+    @RequestMapping(value = "/addRemark.do")
+    @ResponseBody
+    public Map<String,Object> addRemark(ActivityRemark activityRemark,HttpSession session) throws ActivityException {
+
+        User user = (User) session.getAttribute("user");
+
+        activityRemark.setId(UUIDUtil.getUUID());
+        activityRemark.setCreateTime(DateUtil.getDate());
+        activityRemark.setCreateBy(user.getName());
+
+        boolean flag = activityService.addRemark(activityRemark);
+
+        Map<String,Object> resultMap = new HashMap<>();
+        resultMap.put("success",flag);
+        resultMap.put("remark",activityRemark);
+
+        return resultMap;
+    }
+
+    @RequestMapping(value = "/getRemarkListByAid.do")
+    @ResponseBody
+    public List<ActivityRemark> getRemarkListByAid(String activityId) {
+
+        return activityService.getRemarkListByAid(activityId);
+    }
+
+    @RequestMapping(value = "/deleteRemark.do")
+    @ResponseBody
+    public Map<String,Object> deleteRemarkById(String id) throws ActivityException {
+
+        boolean flag = activityService.deleteRemark(id);
+
+        Map<String,Object> resultMap = new HashMap<>();
+        resultMap.put("success",flag);
+
+        return resultMap;
+    }
+
+    @RequestMapping(value = "/updateRemark.do")
+    @ResponseBody
+    public Map<String,Object> updateRemark(ActivityRemark remark,HttpSession session) throws ActivityException {
+
+        User user = (User) session.getAttribute("user");
+
+        remark.setEditBy(user.getName());
+        remark.setEditTime(DateUtil.getDate());
+
+        boolean flag = activityService.updateRemark(remark);
+
+        Map<String,Object> resultMap = new HashMap<>();
+        resultMap.put("success",flag);
+        resultMap.put("remark",remark);
 
         return resultMap;
     }

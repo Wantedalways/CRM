@@ -28,4 +28,36 @@
             #{id}
         </foreach>
     </delete>
+
+    <insert id="insertRemark">
+        insert into tbl_activity_remark values(
+            #{id},
+            #{noteContent},
+            #{createTime},
+            #{createBy},
+            #{editTime},
+            #{editBy},
+            #{editFlag},
+            #{activityId})
+    </insert>
+
+    <select id="selectRemarkListByAid" resultType="ActivityRemark">
+        select * from tbl_activity_remark where activityId = #{activityId} order by createTime desc;
+    </select>
+
+    <delete id="deleteRemarkById">
+        delete from tbl_activity_remark where id = #{id}
+    </delete>
+
+    <update id="updateRemark">
+        update
+            tbl_activity_remark
+        set
+            noteContent = #{noteContent},
+            editTime = #{editTime},
+            editBy = #{editBy},
+            editFlag = #{editFlag}
+        where
+            id = #{id}
+    </update>
 </mapper>

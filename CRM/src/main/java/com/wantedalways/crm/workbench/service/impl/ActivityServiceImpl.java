@@ -5,6 +5,7 @@ import com.wantedalways.crm.exception.ActivityException;
 import com.wantedalways.crm.workbench.dao.ActivityDao;
 import com.wantedalways.crm.workbench.dao.ActivityRemarkDao;
 import com.wantedalways.crm.workbench.entity.Activity;
+import com.wantedalways.crm.workbench.entity.ActivityRemark;
 import com.wantedalways.crm.workbench.service.ActivityService;
 import org.springframework.stereotype.Service;
 
@@ -108,6 +109,64 @@ public class ActivityServiceImpl implements ActivityService {
         flag = true;
 
         return flag;
+    }
+
+    @Override
+    public Activity getDetailById(String id) {
+
+        return activityDao.selectDetailById(id);
+    }
+
+    @Override
+    public boolean addRemark(ActivityRemark activityRemark) throws ActivityException {
+
+        boolean flag = false;
+
+        int result = activityRemarkDao.insertRemark(activityRemark);
+
+        if (result != 1) {
+
+            throw new ActivityException("添加市场活动备注失败！");
+
+        }
+
+        flag = true;
+
+        return flag;
+    }
+
+    @Override
+    public List<ActivityRemark> getRemarkListByAid(String activityId) {
+
+        return activityRemarkDao.selectRemarkListByAid(activityId);
+    }
+
+    @Override
+    public boolean deleteRemark(String id) throws ActivityException {
+
+        int result = activityRemarkDao.deleteRemarkById(id);
+
+        if (result != 1) {
+
+            throw new ActivityException("删除市场活动备注失败！");
+
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean updateRemark(ActivityRemark remark) throws ActivityException {
+
+        int result = activityRemarkDao.updateRemark(remark);
+
+        if (result != 1) {
+
+            throw new ActivityException("修改市场活动备注失败！");
+
+        }
+
+        return true;
     }
 }
 
