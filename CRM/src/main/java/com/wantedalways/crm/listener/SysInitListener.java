@@ -35,8 +35,6 @@ public class SysInitListener implements ServletContextListener {
             application.setAttribute(node.getKey(),node.getValue());
 
         }
-
-        System.out.println("数据字典添加完成！");
     }
 
     @Override

@@ -39,6 +39,7 @@
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.0" />
           <element id="library" level="project" name="Maven: com.github.pagehelper:pagehelper:5.1.10" />
           <element id="library" level="project" name="Maven: com.github.jsqlparser:jsqlparser:2.0" />
+          <element id="library" level="project" name="Maven: jstl:jstl:1.2" />
         </element>
       </element>
       <element id="directory" name="META-INF">
