@@ -5,7 +5,15 @@
       <map>
         <entry key="file://$PROJECT_DIR$/CRM/src/main/webapp/workbench/activity/detail.jsp" value="file://$PROJECT_DIR$/CRM/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/CRM/src/main/webapp/workbench/activity/index.jsp" value="file://$PROJECT_DIR$/CRM/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/CRM/src/main/webapp/workbench/clue" value="file://$PROJECT_DIR$/CRM/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/CRM/src/main/webapp/workbench/contacts/index.jsp" value="file://$PROJECT_DIR$/CRM/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/CRM/src/main/webapp/workbench/customer" value="file://$PROJECT_DIR$/CRM/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/CRM/src/main/webapp/workbench/customer/index.jsp" value="file://$PROJECT_DIR$/CRM/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/CRM/src/main/webapp/workbench/index.jsp" value="file://$PROJECT_DIR$/CRM/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/CRM/src/main/webapp/workbench/transaction/edit.jsp" value="file://$PROJECT_DIR$/CRM/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/CRM/src/main/webapp/workbench/transaction/index.html" value="file://$PROJECT_DIR$/CRM/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/CRM/src/main/webapp/workbench/transaction/index.jsp" value="file://$PROJECT_DIR$/CRM/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/CRM/src/main/webapp/workbench/transaction/save.jsp" value="file://$PROJECT_DIR$/CRM/src/main/webapp" />
       </map>
     </option>
   </component>

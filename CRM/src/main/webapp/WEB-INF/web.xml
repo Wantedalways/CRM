@@ -55,4 +55,8 @@
         <filter-name>loginFilter</filter-name>
         <url-pattern>*.jsp</url-pattern>
     </filter-mapping>
+    <!--添加数据字典的监听器-->
+    <listener>
+        <listener-class>com.wantedalways.crm.listener.SysInitListener</listener-class>
+    </listener>
 </web-app>
