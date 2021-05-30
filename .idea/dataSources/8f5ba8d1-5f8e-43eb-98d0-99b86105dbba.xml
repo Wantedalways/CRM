@@ -1079,7 +1079,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <DataType>char(32)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="322" parent="286" name="fullname">
+    <column id="322" parent="286" name="fullName">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
     </column>
@@ -1111,7 +1111,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <Position>9</Position>
       <DataType>varchar(255)|0s</DataType>
     </column>
-    <column id="330" parent="286" name="mphone">
+    <column id="330" parent="286" name="mobilePhone">
       <Position>10</Position>
       <DataType>varchar(255)|0s</DataType>
     </column>

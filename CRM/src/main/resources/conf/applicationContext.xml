@@ -36,8 +36,9 @@
     <!--配置事务属性-->
     <tx:advice id="activityAdvice" transaction-manager="transactionManager">
         <tx:attributes>
-            <tx:method name="*Activity" propagation="REQUIRED" isolation="DEFAULT" rollback-for="com.wantedalways.crm.exception.ActivityException"/>
-            <tx:method name="*Remark" propagation="REQUIRED" isolation="DEFAULT" rollback-for="com.wantedalways.crm.exception.ActivityException"/>
+            <tx:method name="*Activity" propagation="REQUIRED" isolation="DEFAULT" rollback-for="com.wantedalways.crm.exception.DMLException"/>
+            <tx:method name="*Remark" propagation="REQUIRED" isolation="DEFAULT" rollback-for="com.wantedalways.crm.exception.DMLException"/>
+            <tx:method name="*Clue" propagation="REQUIRED" isolation="DEFAULT" rollback-for="com.wantedalways.crm.exception.DMLException"/>
         </tx:attributes>
     </tx:advice>
     <!--配置事务AOP-->

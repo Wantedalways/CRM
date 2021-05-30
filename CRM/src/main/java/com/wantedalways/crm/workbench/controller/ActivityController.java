@@ -1,6 +1,6 @@
 package com.wantedalways.crm.workbench.controller;
 
-import com.wantedalways.crm.exception.ActivityException;
+import com.wantedalways.crm.exception.DMLException;
 import com.wantedalways.crm.settings.entity.User;
 import com.wantedalways.crm.settings.service.UserService;
 import com.wantedalways.crm.util.DateUtil;
@@ -49,7 +49,7 @@ public class ActivityController {
      */
     @RequestMapping(value = "/save.do")
     @ResponseBody
-    public Map<String,Object> saveActivity(Activity activity, HttpSession session) throws ActivityException {
+    public Map<String,Object> saveActivity(Activity activity, HttpSession session) throws DMLException {
 
         activity.setId(UUIDUtil.getUUID());
         activity.setCreateTime(DateUtil.getDate());
@@ -81,7 +81,7 @@ public class ActivityController {
 
     @RequestMapping(value = "/delete.do")
     @ResponseBody
-    public Map<String,Object> delActivity(String[] id) throws ActivityException {
+    public Map<String,Object> delActivity(String[] id) throws DMLException {
 
         boolean success = activityService.delActivity(id);
 
@@ -100,7 +100,7 @@ public class ActivityController {
 
     @RequestMapping(value = "/update.do")
     @ResponseBody
-    public Map<String,Object> editActivity(Activity activity,HttpSession session) throws ActivityException {
+    public Map<String,Object> editActivity(Activity activity,HttpSession session) throws DMLException {
 
         User user = (User) session.getAttribute("user");
         activity.setEditBy(user.getName());
@@ -129,7 +129,7 @@ public class ActivityController {
 
     @RequestMapping(value = "/addRemark.do")
     @ResponseBody
-    public Map<String,Object> addRemark(ActivityRemark activityRemark,HttpSession session) throws ActivityException {
+    public Map<String,Object> addRemark(ActivityRemark activityRemark,HttpSession session) throws DMLException {
 
         User user = (User) session.getAttribute("user");
 
@@ -155,7 +155,7 @@ public class ActivityController {
 
     @RequestMapping(value = "/deleteRemark.do")
     @ResponseBody
-    public Map<String,Object> deleteRemarkById(String id) throws ActivityException {
+    public Map<String,Object> deleteRemarkById(String id) throws DMLException {
 
         boolean flag = activityService.deleteRemark(id);
 
@@ -167,7 +167,7 @@ public class ActivityController {
 
     @RequestMapping(value = "/updateRemark.do")
     @ResponseBody
-    public Map<String,Object> updateRemark(ActivityRemark remark,HttpSession session) throws ActivityException {
+    public Map<String,Object> updateRemark(ActivityRemark remark,HttpSession session) throws DMLException {
 
         User user = (User) session.getAttribute("user");
 

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LoginException extends Exception{
+
     public LoginException() {
         super();
     }

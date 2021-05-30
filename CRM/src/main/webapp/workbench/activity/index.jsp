@@ -117,7 +117,7 @@
                 $("#hide-startDate").val($.trim($("#search-activityStartDate").val()));
                 $("#hide-endDate").val($.trim($("#search-activityEndDate").val()));
 
-                activityList(1,10);
+                activityList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 
             });
 
@@ -334,7 +334,6 @@
                     })
 
                     $("#activityListTbody").html(html);
-                    $("#totalCount").html(data.total);
 
                     // 计算总页数
                     var totalPages = (data.total % pageSize === 0) ? (data.total / pageSize) : Math.ceil(data.total / pageSize);

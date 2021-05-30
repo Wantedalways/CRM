@@ -3,13 +3,13 @@ package com.wantedalways.crm.exception;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ActivityException extends Exception{
+public class DMLException extends Exception{
 
-    public ActivityException() {
+    public DMLException() {
         super();
     }
 
-    public ActivityException(String message) {
+    public DMLException(String message) {
         super(message);
     }
 }

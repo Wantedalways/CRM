@@ -12,6 +12,8 @@ request.getContextPath() + "/";
     <link href="static/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
     <link href="static/jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css"
           type="text/css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="static/jquery/bs_pagination/jquery.bs_pagination.min.css">
+
 
     <script type="text/javascript" src="static/jquery/jquery-1.11.1-min.js"></script>
     <script type="text/javascript" src="static/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
@@ -19,12 +21,35 @@ request.getContextPath() + "/";
             src="static/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript"
             src="static/jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script type="text/javascript" src="static/jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
+    <script type="text/javascript" src="static/jquery/bs_pagination/en.js"></script>
 
     <script type="text/javascript">
 
         $(function () {
 
-            // 创建线索
+            // 时间模块
+            $.fn.datetimepicker.dates['zh-CN'] = {
+                days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"],
+                daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+                daysMin:  ["日", "一", "二", "三", "四", "五", "六", "日"],
+                months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+                monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+                today: "今天",
+                suffix: [],
+                meridiem: ["上午", "下午"]
+            };
+
+            $(".time").datetimepicker({
+                minView: "month",
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayBtn: true,
+                pickerPosition: "top-left"
+            });
+
+            // 打开添加线索的模态窗口
             $("#addClueBtn").click(function () {
 
                 $.ajax({
@@ -48,13 +73,163 @@ request.getContextPath() + "/";
                 $("#createClueModal").modal("show");
             })
 
+            // 保存线索
+            $("#saveBtn").click(function () {
 
+                $.ajax({
+
+                    url : "clue/save.do",
+                    data : {
+
+                        "fullName" : $.trim($("#create-surname").val()),
+                        "appellation" : $.trim($("#create-call").val()),
+                        "owner" : $.trim($("#create-clueOwner").val()),
+                        "company" : $.trim($("#create-company").val()),
+                        "job" : $.trim($("#create-job").val()),
+                        "email" : $.trim($("#create-email").val()),
+                        "phone" : $.trim($("#create-phone").val()),
+                        "website" : $.trim($("#create-website").val()),
+                        "mobilePhone" : $.trim($("#create-mphone").val()),
+                        "state" : $.trim($("#create-status").val()),
+                        "source" : $.trim($("#create-source").val()),
+                        "description" : $.trim($("#create-describe").val()),
+                        "contactSummary" : $.trim($("#create-contactSummary").val()),
+                        "nextContactTime" : $.trim($("#create-nextContactTime").val()),
+                        "address" : $.trim($("#create-address").val())
+
+                    },
+                    type : "post",
+                    dataType : "json",
+                    success : function (data) {
+
+                        if (data.success) {
+
+                            // 更新线索列表
+
+                            // 关闭模态窗口
+                            $("#createClueModal").modal("hide");
+
+                            // 清楚数据
+                            $("#clueForm")[0].reset();
+
+                        } else {
+
+                            alert(data.msg);
+
+                        }
+
+
+                    }
+                })
+            })
+
+            // 线索列表
+            clueList(1,5);
+
+            // 查询线索按钮
+            $("#searchBtn").click(function () {
+
+                $("#hide-name").val($.trim($("#search-name").val()));
+                $("#hide-company").val($.trim($("#search-company").val()));
+                $("#hide-phone").val($.trim($("#search-phone").val()));
+                $("#hide-source").val($.trim($("#search-source").val()));
+                $("#hide-owner").val($.trim($("#search-owner").val()));
+                $("#hide-mobilePhone").val($.trim($("#search-mobilePhone").val()));
+                $("#hide-state").val($.trim($("#search-state").val()));
+
+                clueList(1,$("#cluePage").bs_pagination('getOption', 'rowsPerPage'));
+
+            })
         });
 
+        // 刷新线索列表的方法
+        function clueList(pageNo,pageSize) {
+
+            $("#search-name").val($.trim($("#hide-name").val()));
+            $("#search-company").val($.trim($("#hide-company").val()));
+            $("#search-phone").val($.trim($("#hide-phone").val()));
+            $("#search-source").val($.trim($("#hide-source").val()));
+            $("#search-owner").val($.trim($("#hide-owner").val()));
+            $("#search-mobilePhone").val($.trim($("#hide-mobilePhone").val()));
+            $("#search-state").val($.trim($("#hide-state").val()));
+
+            $.ajax({
+
+                url : "clue/clueList.do",
+                data : {
+
+                    "pageNo" : pageNo,
+                    "pageSize" : pageSize,
+                    "fullName" : $("#search-name").val(),
+                    "company" : $("#search-company").val(),
+                    "phone" : $("#search-phone").val(),
+                    "source" : $("#search-source").val(),
+                    "owner" : $("#search-owner").val(),
+                    "mobilePhone" : $("#search-mobilePhone").val(),
+                    "state" : $("#search-state").val()
+
+                },
+                type : "get",
+                dataType : "json",
+                success : function (data) {
+
+                    var html = "";
+
+                    $.each(data.dataList,function (i,n) {
+
+                        html += '<tr class="active">';
+                        html += '<td><input type="checkbox"/></td>';
+                        html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'clue/detail.do?id='+n.id+'\';">'+n.fullName + n.appellation+'</a></td>';
+                        html += '<td>'+n.company+'</td>';
+                        html += '<td>'+n.phone+'</td>';
+                        html += '<td>'+n.mobilePhone+'</td>';
+                        html += '<td>'+n.source+'</td>';
+                        html += '<td>'+n.owner+'</td>';
+                        html += '<td>'+n.state+'</td>';
+                        html += '</tr>';
+
+                    })
+
+                    $("#clueListTbody").html(html);
+
+                    // 计算总页数
+                    var totalPages = (data.total % pageSize === 0) ? (data.total / pageSize) : Math.ceil(data.total / pageSize);
+
+                    // 使用分页插件
+                    $("#cluePage").bs_pagination({
+                        currentPage: pageNo, // 页码
+                        rowsPerPage: pageSize, // 每页显示的记录条数
+                        maxRowsPerPage: 20, // 每页最多显示的记录条数
+                        totalPages: totalPages, // 总页数
+                        totalRows: data.total, // 总记录条数
+
+                        visiblePageLinks: 3, // 显示几个卡片
+
+                        showGoToPage: true,
+                        showRowsPerPage: true,
+                        showRowsInfo: true,
+                        showRowsDefaultInfo: true,
+
+                        // 点击分页组件时触发
+                        onChangePage : function(event, data){
+                            clueList(data.currentPage , data.rowsPerPage);
+                        }
+                    });
+                }
+            })
+        }
     </script>
     <title></title>
 </head>
 <body>
+
+<input type="hidden" id="hide-name">
+<input type="hidden" id="hide-company">
+<input type="hidden" id="hide-phone">
+<input type="hidden" id="hide-source">
+<input type="hidden" id="hide-owner">
+<input type="hidden" id="hide-mobilePhone">
+<input type="hidden" id="hide-state">
 
 <!-- 创建线索的模态窗口 -->
 <div class="modal fade" id="createClueModal" role="dialog">
@@ -67,7 +242,7 @@ request.getContextPath() + "/";
                 <h4 class="modal-title" id="myModalLabel">创建线索</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" role="form">
+                <form class="form-horizontal" role="form" id="clueForm">
 
                     <div class="form-group">
                         <label for="create-clueOwner" class="col-sm-2 control-label">所有者<span
@@ -169,7 +344,7 @@ request.getContextPath() + "/";
                         <div class="form-group">
                             <label for="create-nextContactTime" class="col-sm-2 control-label">下次联系时间</label>
                             <div class="col-sm-10" style="width: 300px;">
-                                <input type="text" class="form-control" id="create-nextContactTime">
+                                <input type="text" class="form-control time" id="create-nextContactTime">
                             </div>
                         </div>
                     </div>
@@ -189,7 +364,7 @@ request.getContextPath() + "/";
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+                <button type="button" class="btn btn-primary" id="saveBtn">保存</button>
             </div>
         </div>
     </div>
@@ -374,43 +549,31 @@ request.getContextPath() + "/";
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">名称</div>
-                        <input class="form-control" type="text">
+                        <input class="form-control" type="text" id="search-name">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">公司</div>
-                        <input class="form-control" type="text">
+                        <input class="form-control" type="text" id="search-company">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">公司座机</div>
-                        <input class="form-control" type="text">
+                        <input class="form-control" type="text" id="search-phone">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">线索来源</div>
-                        <select class="form-control">
-                            <option></option>
-                            <option>广告</option>
-                            <option>推销电话</option>
-                            <option>员工介绍</option>
-                            <option>外部介绍</option>
-                            <option>在线商场</option>
-                            <option>合作伙伴</option>
-                            <option>公开媒介</option>
-                            <option>销售邮件</option>
-                            <option>合作伙伴研讨会</option>
-                            <option>内部研讨会</option>
-                            <option>交易会</option>
-                            <option>web下载</option>
-                            <option>web调研</option>
-                            <option>聊天</option>
+                        <select class="form-control" id="search-source">
+                            <c:forEach items="${source}" var="s">
+                                <option value="${s.value}">${s.text}</option>
+                            </c:forEach>
                         </select>
                     </div>
                 </div>
@@ -420,7 +583,7 @@ request.getContextPath() + "/";
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">所有者</div>
-                        <input class="form-control" type="text">
+                        <input class="form-control" type="text" id="search-owner">
                     </div>
                 </div>
 
@@ -428,27 +591,22 @@ request.getContextPath() + "/";
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">手机</div>
-                        <input class="form-control" type="text">
+                        <input class="form-control" type="text" id="search-mobilePhone">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">线索状态</div>
-                        <select class="form-control">
-                            <option></option>
-                            <option>试图联系</option>
-                            <option>将来联系</option>
-                            <option>已联系</option>
-                            <option>虚假线索</option>
-                            <option>丢失线索</option>
-                            <option>未联系</option>
-                            <option>需要条件</option>
+                        <select class="form-control" id="search-state">
+                            <c:forEach items="${clueState}" var="c">
+                                <option value="${c.value}">${c.text}</option>
+                            </c:forEach>
                         </select>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-default">查询</button>
+                <button type="button" class="btn btn-default" id="searchBtn">查询</button>
 
             </form>
         </div>
@@ -480,66 +638,12 @@ request.getContextPath() + "/";
                     <td>线索状态</td>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td><input type="checkbox"/></td>
-                    <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='workbench/clue/detail.jsp';">李四先生</a></td>
-                    <td>动力节点</td>
-                    <td>010-84846003</td>
-                    <td>12345678901</td>
-                    <td>广告</td>
-                    <td>zhangsan</td>
-                    <td>已联系</td>
-                </tr>
-                <tr class="active">
-                    <td><input type="checkbox"/></td>
-                    <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='workbench/clue/detail.jsp';">李四先生</a></td>
-                    <td>动力节点</td>
-                    <td>010-84846003</td>
-                    <td>12345678901</td>
-                    <td>广告</td>
-                    <td>zhangsan</td>
-                    <td>已联系</td>
-                </tr>
-                </tbody>
+                <tbody id="clueListTbody"></tbody>
             </table>
         </div>
 
         <div style="height: 50px; position: relative;top: 60px;">
-            <div>
-                <button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
-            </div>
-            <div class="btn-group" style="position: relative;top: -34px; left: 110px;">
-                <button type="button" class="btn btn-default" style="cursor: default;">显示</button>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        10
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">20</a></li>
-                        <li><a href="#">30</a></li>
-                    </ul>
-                </div>
-                <button type="button" class="btn btn-default" style="cursor: default;">条/页</button>
-            </div>
-            <div style="position: relative;top: -88px; left: 285px;">
-                <nav>
-                    <ul class="pagination">
-                        <li class="disabled"><a href="#">首页</a></li>
-                        <li class="disabled"><a href="#">上一页</a></li>
-                        <li class="active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">下一页</a></li>
-                        <li class="disabled"><a href="#">末页</a></li>
-                    </ul>
-                </nav>
-            </div>
+            <div id="cluePage"></div>
         </div>
 
     </div>

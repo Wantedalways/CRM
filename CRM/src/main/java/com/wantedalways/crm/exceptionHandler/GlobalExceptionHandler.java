@@ -1,6 +1,6 @@
 package com.wantedalways.crm.exceptionHandler;
 
-import com.wantedalways.crm.exception.ActivityException;
+import com.wantedalways.crm.exception.DMLException;
 import com.wantedalways.crm.exception.LoginException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,9 +23,9 @@ public class GlobalExceptionHandler {
         return exceptionMap;
     }
 
-    @ExceptionHandler(value = ActivityException.class)
+    @ExceptionHandler(value = DMLException.class)
     @ResponseBody
-    public Map<String,Object> doDeleteException(Exception e) {
+    public Map<String,Object> doDMLException(Exception e) {
 
         Map<String,Object> exceptionMap = new HashMap<>();
         exceptionMap.put("success",false);

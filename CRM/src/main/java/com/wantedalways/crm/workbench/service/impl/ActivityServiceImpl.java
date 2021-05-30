@@ -1,7 +1,7 @@
 package com.wantedalways.crm.workbench.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.wantedalways.crm.exception.ActivityException;
+import com.wantedalways.crm.exception.DMLException;
 import com.wantedalways.crm.workbench.dao.ActivityDao;
 import com.wantedalways.crm.workbench.dao.ActivityRemarkDao;
 import com.wantedalways.crm.workbench.entity.Activity;
@@ -22,7 +22,7 @@ public class ActivityServiceImpl implements ActivityService {
     private ActivityRemarkDao activityRemarkDao;
 
     @Override
-    public boolean addActivity(Activity activity) throws ActivityException {
+    public boolean addActivity(Activity activity) throws DMLException {
 
         boolean flag = false;
 
@@ -30,7 +30,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         if (result != 1) {
 
-            throw new ActivityException("添加市场活动失败！");
+            throw new DMLException("添加市场活动失败！");
 
         }
 
@@ -53,7 +53,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public boolean delActivity(String[] id) throws ActivityException {
+    public boolean delActivity(String[] id) throws DMLException {
 
         // 布尔标记
         boolean flag = false;
@@ -67,14 +67,14 @@ public class ActivityServiceImpl implements ActivityService {
         if (idealCount != realityCount) {
 
             // 抛出异常，回滚事务
-            throw new ActivityException("市场活动备注删除错误！");
+            throw new DMLException("市场活动备注删除错误！");
         }
         // 无异常抛出则执行删除市场活动操作
         int resultCount = activityDao.deleteActivityByIds(id);
 
         if (resultCount != id.length) {
 
-            throw new ActivityException("市场活动删除错误！");
+            throw new DMLException("市场活动删除错误！");
 
         } else {
 
@@ -94,7 +94,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public boolean editActivity(Activity activity) throws ActivityException {
+    public boolean editActivity(Activity activity) throws DMLException {
 
         boolean flag = false;
 
@@ -102,7 +102,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         if (result != 1) {
 
-            throw new ActivityException("修改市场活动失败！");
+            throw new DMLException("修改市场活动失败！");
 
         }
 
@@ -118,7 +118,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public boolean addRemark(ActivityRemark activityRemark) throws ActivityException {
+    public boolean addRemark(ActivityRemark activityRemark) throws DMLException {
 
         boolean flag = false;
 
@@ -126,7 +126,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         if (result != 1) {
 
-            throw new ActivityException("添加市场活动备注失败！");
+            throw new DMLException("添加市场活动备注失败！");
 
         }
 
@@ -142,13 +142,13 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public boolean deleteRemark(String id) throws ActivityException {
+    public boolean deleteRemark(String id) throws DMLException {
 
         int result = activityRemarkDao.deleteRemarkById(id);
 
         if (result != 1) {
 
-            throw new ActivityException("删除市场活动备注失败！");
+            throw new DMLException("删除市场活动备注失败！");
 
         }
 
@@ -156,13 +156,13 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public boolean updateRemark(ActivityRemark remark) throws ActivityException {
+    public boolean updateRemark(ActivityRemark remark) throws DMLException {
 
         int result = activityRemarkDao.updateRemark(remark);
 
         if (result != 1) {
 
-            throw new ActivityException("修改市场活动备注失败！");
+            throw new DMLException("修改市场活动备注失败！");
 
         }
 
