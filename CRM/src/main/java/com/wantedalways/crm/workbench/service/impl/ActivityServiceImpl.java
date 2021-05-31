@@ -168,5 +168,19 @@ public class ActivityServiceImpl implements ActivityService {
 
         return true;
     }
+
+    @Override
+    public List<Activity> getActivityList(String clueId) {
+
+        return activityDao.selectActivityRelation(clueId);
+
+    }
+
+    @Override
+    public List<Activity> getActivityListByName(String clueId, String name) {
+
+        return activityDao.selectActivityListByName(clueId,name);
+
+    }
 }
 

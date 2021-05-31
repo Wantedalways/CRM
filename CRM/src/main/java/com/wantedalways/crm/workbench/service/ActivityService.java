@@ -30,4 +30,8 @@ public interface ActivityService {
     boolean deleteRemark(String id) throws DMLException;
 
     boolean updateRemark(ActivityRemark remark) throws DMLException;
+
+    List<Activity> getActivityList(String clueId);
+
+    List<Activity> getActivityListByName(String clueId, String name);
 }

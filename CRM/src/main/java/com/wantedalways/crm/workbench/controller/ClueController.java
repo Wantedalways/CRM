@@ -6,7 +6,9 @@ import com.wantedalways.crm.settings.service.UserService;
 import com.wantedalways.crm.util.DateUtil;
 import com.wantedalways.crm.util.UUIDUtil;
 import com.wantedalways.crm.vo.PageListVo;
+import com.wantedalways.crm.workbench.entity.Activity;
 import com.wantedalways.crm.workbench.entity.Clue;
+import com.wantedalways.crm.workbench.service.ActivityService;
 import com.wantedalways.crm.workbench.service.ClueService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,9 @@ public class ClueController {
 
     @Resource
     private ClueService clueService;
+
+    @Resource
+    private ActivityService activityService;
 
     @RequestMapping(value = "/getUserList.do")
     @ResponseBody
@@ -82,5 +87,45 @@ public class ClueController {
         mv.setViewName("/workbench/clue/detail.jsp");
 
         return mv;
+    }
+
+    @RequestMapping(value = "/getActivityList.do")
+    @ResponseBody
+    public List<Activity> getActivityList(String clueId) {
+
+        return activityService.getActivityList(clueId);
+
+    }
+
+    @RequestMapping(value = "/removeRelation.do")
+    @ResponseBody
+    public Map<String,Object> removeRelation(String id) throws DMLException {
+
+        boolean result = clueService.removeRelationClue(id);
+
+        Map<String,Object> resultMap = new HashMap<>();
+        resultMap.put("success",result);
+
+        return resultMap;
+    }
+
+    @RequestMapping(value = "/getActivityListByName.do")
+    @ResponseBody
+    public List<Activity> getActivityListByName(String clueId,String name) {
+
+        return activityService.getActivityListByName(clueId,name);
+
+    }
+
+    @RequestMapping(value = "/addRelation.do")
+    @ResponseBody
+    public Map<String,Object> addRelation(String[] activityId,String clueId) throws DMLException {
+
+        boolean result = clueService.addRelationClue(activityId,clueId);
+
+        Map<String,Object> resultMap = new HashMap<>();
+        resultMap.put("success",result);
+
+        return resultMap;
     }
 }

@@ -15,4 +15,8 @@ public interface ClueService {
     int queryTotalByCondition(Clue clue);
 
     Clue getDetailById(String id);
+
+    boolean removeRelationClue(String id) throws DMLException;
+
+    boolean addRelationClue(String[] activityId, String clueId) throws DMLException;
 }

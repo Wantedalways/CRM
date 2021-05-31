@@ -126,5 +126,50 @@
             a.owner = u.id
         where
             a.id = #{id}
-</select>
+    </select>
+
+    <select id="selectActivityRelation" resultType="Activity">
+        select
+            r.id,
+            a.name,
+            a.startDate,
+            a.endDate,
+            u.name as owner
+        from
+            tbl_activity a
+        join
+            tbl_user u
+        on
+            a.owner = u.id
+        join
+            tbl_clue_activity_relation r
+        on
+            r.activityId = a.id
+        where
+            r.clueId = #{clueId}
+    </select>
+
+    <select id="selectActivityListByName" resultType="Activity">
+        select
+            a.id,
+            a.name,
+            a.startDate,
+            a.endDate,
+            u.name as owner
+        from
+            tbl_activity a
+        join
+            tbl_user u
+        on
+            a.owner=u.id
+        where
+            a.name like concat('%',#{name},'%') and a.id not in (
+                select
+                    activityId
+                from
+                    tbl_clue_activity_relation
+                where
+                    clueId=#{clueId}
+            )
+    </select>
 </mapper>

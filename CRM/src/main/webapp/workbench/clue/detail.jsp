@@ -51,7 +51,184 @@ request.getContextPath() + "/";
             $(".myHref").mouseout(function () {
                 $(this).children("span").css("color", "#E6E6E6");
             });
+
+            // 复选框
+            $("#selectAll").click(function () {
+
+                $(".selectSingle").prop("checked",this.checked);
+
+            })
+
+            $("#addRelationTbody").on("click",$(".selectSingle"),function () {
+
+                $("#selectAll").prop("checked",$(".selectSingle").length === $(".selectSingle:checked").length);
+
+            })
+
+            showActivityList();
+
+            // 关联市场活动模态窗口
+            $("#activityName").keydown(function (event) {
+
+                if (event.key === "Enter") {
+
+                    // 查询并展现市场活动列表
+                    $.ajax({
+
+                        url : "clue/getActivityListByName.do",
+                        data : {
+
+                            "clueId" : "${clue.id}",
+                            "name" : $.trim($("#activityName").val())
+
+                        },
+                        type : "get",
+                        dataType : "json",
+                        success : function (data) {
+
+                            var html = "";
+
+                            $.each(data,function (i,n) {
+
+                                html += '<tr>';
+                                html += '<td><input type="checkbox" class="selectSingle" value="'+n.id+'"/></td>';
+                                html += ' <td>'+n.name+'</td>';
+                                html += '<td>'+n.startDate+'</td>';
+                                html += '<td>'+n.endDate+'</td>';
+                                html += '<td>'+n.owner+'</td>';
+                                html += '</tr>';
+
+                            })
+
+                            $("#addRelationTbody").html(html);
+                        }
+                    })
+                    // 将模态窗口默认的回车行为禁用
+                    return false;
+                }
+            })
+
+            // 关联市场活动
+            $("#addRelation").click(function () {
+
+                var $selectSingle = $(".selectSingle:checked");
+
+                if ($selectSingle.length === 0) {
+
+                    alert("请至少选中一项市场活动！");
+
+                } else {
+
+                    if (confirm("确认关联？")) {
+
+                        var param = "clueId=" + "${clue.id}" + "&";
+
+                        for (var i = 0;i < $selectSingle.length;i ++) {
+
+                            param += "activityId=" + $selectSingle[i].value;
+
+                            if (i < $selectSingle.length - 1) {
+
+                                param += "&";
+
+                            }
+                        }
+
+                        $.ajax({
+
+                            url : "clue/addRelation.do",
+                            data : param,
+                            type : "post",
+                            dataType : "json",
+                            success : function (data) {
+
+                                if (data.success) {
+
+                                    // 清除搜索框内容
+                                    $("#activityName").val("");
+
+                                    // 清除复选框勾选
+                                    $("#selectAll").prop("checked",false);
+
+                                    // 清空列表
+                                    $("#addRelationTbody").html("");
+
+                                    // 刷新市场活动列表
+                                    showActivityList();
+
+
+                                } else {
+
+                                    alert(data.msg);
+                                }
+                            }
+                        })
+                    }
+
+
+                }
+            })
         });
+
+        // 展现市场活动的方法：
+        function showActivityList() {
+
+            $.ajax({
+
+                url : "clue/getActivityList.do",
+                data : {
+
+                    "clueId" : "${clue.id}",
+
+                },
+                type : "get",
+                dataType : "json",
+                success : function (data) {
+
+                    var html = "";
+
+                    $.each(data,function (i,n) {
+
+                        html += '<tr>';
+                        html += '<td>'+n.name+'</td>';
+                        html += '<td>'+n.startDate+'</td>';
+                        html += '<td>'+n.endDate+'</td>';
+                        html += '<td>'+n.owner+'</td>';
+                        html += '<td><a href="javascript:void(0);" style="text-decoration: none;" onclick="removeRelation(\''+n.id+'\')"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>';
+                        html += '</tr>';
+
+                    })
+                    $("#activityTbody").html(html);
+                }
+            })
+        }
+        // 解除关联的方法
+        function removeRelation(id) {
+
+            $.ajax({
+
+                url : "clue/removeRelation.do",
+                data : {
+
+                    "id" : id
+
+                },
+                type : "post",
+                dataType : "json",
+                success : function (data) {
+
+                    if (data.success) {
+
+                        showActivityList();
+
+                    } else {
+
+                        alert(data.msg);
+
+                    }
+                }
+            })
+        }
 
     </script>
     <title></title>
@@ -73,7 +250,7 @@ request.getContextPath() + "/";
                 <div class="btn-group" style="position: relative; top: 18%; left: 8px;">
                     <form class="form-inline" role="form">
                         <div class="form-group has-feedback">
-                            <input type="text" class="form-control" style="width: 300px;"
+                            <input type="text" id="activityName" class="form-control" style="width: 300px;"
                                    placeholder="请输入市场活动名称，支持模糊查询">
                             <span class="glyphicon glyphicon-search form-control-feedback"></span>
                         </div>
@@ -82,7 +259,7 @@ request.getContextPath() + "/";
                 <table id="activityTable" class="table table-hover" style="width: 900px; position: relative;top: 10px;">
                     <thead>
                     <tr style="color: #B3B3B3;">
-                        <td><input type="checkbox"/></td>
+                        <td><input type="checkbox" id="selectAll"/></td>
                         <td>名称</td>
                         <td>开始日期</td>
                         <td>结束日期</td>
@@ -90,27 +267,12 @@ request.getContextPath() + "/";
                         <td></td>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td><input type="checkbox"/></td>
-                        <td>发传单</td>
-                        <td>2020-10-10</td>
-                        <td>2020-10-20</td>
-                        <td>zhangsan</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"/></td>
-                        <td>发传单</td>
-                        <td>2020-10-10</td>
-                        <td>2020-10-20</td>
-                        <td>zhangsan</td>
-                    </tr>
-                    </tbody>
+                    <tbody id="addRelationTbody"></tbody>
                 </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">关联</button>
+                <button type="button" class="btn btn-primary" id="addRelation">关联</button>
             </div>
         </div>
     </div>
@@ -455,24 +617,7 @@ request.getContextPath() + "/";
                     <td></td>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>发传单</td>
-                    <td>2020-10-10</td>
-                    <td>2020-10-20</td>
-                    <td>zhangsan</td>
-                    <td><a href="javascript:void(0);" style="text-decoration: none;"><span
-                            class="glyphicon glyphicon-remove"></span>解除关联</a></td>
-                </tr>
-                <tr>
-                    <td>发传单</td>
-                    <td>2020-10-10</td>
-                    <td>2020-10-20</td>
-                    <td>zhangsan</td>
-                    <td><a href="javascript:void(0);" style="text-decoration: none;"><span
-                            class="glyphicon glyphicon-remove"></span>解除关联</a></td>
-                </tr>
-                </tbody>
+                <tbody id="activityTbody"></tbody>
             </table>
         </div>
 

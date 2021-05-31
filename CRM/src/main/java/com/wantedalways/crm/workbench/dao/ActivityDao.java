@@ -1,6 +1,7 @@
 package com.wantedalways.crm.workbench.dao;
 
 import com.wantedalways.crm.workbench.entity.Activity;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,4 +21,8 @@ public interface ActivityDao {
     int updateActivity(Activity activity);
 
     Activity selectDetailById(String id);
+
+    List<Activity> selectActivityRelation(String clueId);
+
+    List<Activity> selectActivityListByName(@Param("clueId") String clueId, @Param("name") String name);
 }
