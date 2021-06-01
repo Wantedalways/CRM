@@ -8,6 +8,7 @@ import com.wantedalways.crm.util.UUIDUtil;
 import com.wantedalways.crm.vo.PageListVo;
 import com.wantedalways.crm.workbench.entity.Activity;
 import com.wantedalways.crm.workbench.entity.Clue;
+import com.wantedalways.crm.workbench.entity.Tran;
 import com.wantedalways.crm.workbench.service.ActivityService;
 import com.wantedalways.crm.workbench.service.ClueService;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
@@ -127,5 +129,23 @@ public class ClueController {
         resultMap.put("success",result);
 
         return resultMap;
+    }
+
+    @RequestMapping(value = "/convert.do")
+    public String convertClue(String clueId, String flag, Tran tran, HttpServletRequest request) throws DMLException {
+
+        User user = (User) request.getSession().getAttribute("user");
+        String createBy = user.getName();
+
+        if ("true".equals(flag)) {
+
+            tran.setId(UUIDUtil.getUUID());
+            tran.setCreateBy(createBy);
+            tran.setCreateTime(DateUtil.getDate());
+
+        }
+        clueService.convertClue(clueId,tran,createBy);
+
+        return request.getContextPath() + "/workbench/clue/index.jsp";
     }
 }

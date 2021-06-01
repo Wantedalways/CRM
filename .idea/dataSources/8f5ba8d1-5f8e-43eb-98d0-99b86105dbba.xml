@@ -1233,7 +1233,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <Position>4</Position>
       <DataType>char(32)|0s</DataType>
     </column>
-    <column id="359" parent="289" name="fullname">
+    <column id="359" parent="289" name="fullName">
       <Position>5</Position>
       <DataType>varchar(255)|0s</DataType>
     </column>
@@ -1245,7 +1245,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <Position>7</Position>
       <DataType>varchar(255)|0s</DataType>
     </column>
-    <column id="362" parent="289" name="mphone">
+    <column id="362" parent="289" name="mobilePhone">
       <Position>8</Position>
       <DataType>varchar(255)|0s</DataType>
     </column>

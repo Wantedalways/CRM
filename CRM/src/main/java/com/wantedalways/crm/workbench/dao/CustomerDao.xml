@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wantedalways.crm.workbench.dao.CustomerDao">
+
+    <select id="selectCustomerByName" resultType="Customer">
+        select *
+        from tbl_customer
+        where name = #{name}
+    </select>
+
+    <insert id="insertCustomer">
+        insert into tbl_customer
+        values (#{id},
+                #{owner},
+                #{name},
+                #{website},
+                #{phone},
+                #{createBy},
+                #{createTime},
+                #{editBy},
+                #{editTime},
+                #{contactSummary},
+                #{nextContactTime},
+                #{description},
+                #{address})
+    </insert>
+</mapper>

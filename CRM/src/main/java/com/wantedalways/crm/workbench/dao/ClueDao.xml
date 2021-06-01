@@ -156,4 +156,20 @@
         insert into tbl_clue_activity_relation (id, clueId, activityId)
         values (#{id},#{clueId},#{activityId});
     </insert>
+
+    <select id="selectClueById" resultType="Clue">
+        select * from tbl_clue where id = #{id}
+    </select>
+
+    <select id="selectRelationByClueId" resultType="java.lang.String">
+        select activityId from tbl_clue_activity_relation where clueId=#{clueId}
+    </select>
+
+    <delete id="deleteRelationByClueId">
+        delete from tbl_clue_activity_relation where clueId = #{clueId}
+    </delete>
+
+    <delete id="deleteClueById">
+        delete from tbl_clue where id=#{clueId}
+    </delete>
 </mapper>

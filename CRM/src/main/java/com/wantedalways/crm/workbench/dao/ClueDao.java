@@ -18,4 +18,12 @@ public interface ClueDao {
     int deleteRelation(String id);
 
     int addRelation(@Param("id") String id, @Param("activityId")String aid, @Param("clueId")String clueId);
+
+    Clue selectClueById(String clueId);
+
+    List<String> selectRelationByClueId(String clueId);
+
+    int deleteRelationByClueId(String clueId);
+
+    int deleteClueById(String clueId);
 }
